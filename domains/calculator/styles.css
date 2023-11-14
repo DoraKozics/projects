@@ -1,0 +1,77 @@
+body {
+    background-color: #08031e;
+    text-align: center;
+    font-family: 'Fira Sans', serif;
+}
+
+h1 {
+    margin-top: 5%;
+    color: white;
+    font-size: 40px;
+}
+
+#number1 {
+    margin-top: 5%;
+}
+
+#add {
+    margin-top: 3%;
+}
+
+input {
+    width: 50%;
+    height: 50px;
+    font-family: 'Fira Sans', serif;
+    font-size: 40px;
+    font-weight: bolder;
+    margin-bottom: 5px;
+    border-style: solid;
+    border-color: floralwhite;
+    border-width: 5px;
+}
+
+
+button.math {
+    color: white;
+    background-color: #f6c409;
+    border-radius: 5px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    width: 10%;
+    height: 50px;
+    font-family: 'Fira Sans', serif;
+    font-size: 40px;
+    font-weight: bolder;
+}
+
+button:active {
+    color: #08031e;
+}
+
+
+#result {
+    margin-top: 20px;
+    color: #f6c409;
+    font-size: 50px;
+}
+
+#enter {
+    position: absolute;
+    bottom: 5px;
+    background-color: crimson;
+    font-size: 1.3em;
+    padding: 12px;
+    border-radius: 5em;
+    transition: all 0.2s ease;
+}
+
+#enter:focus {
+    background-color: darkred;
+}
+
+#enter:hover {
+    color: whitesmoke;
+    transform: scale(1.2);
+}
