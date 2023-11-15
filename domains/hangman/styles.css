@@ -1,0 +1,45 @@
+body {
+    font-family: Outfit, serif;
+    background-color: #fafafa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    background-color: orangered;
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    color: #08031e;
+}
+
+#keyboard {
+    width: 36%;
+    text-align: justify;
+    padding: 10px;
+}
+
+button {
+    font-family: Outfit, serif;
+    font-weight: bolder;
+    font-size: 17px;
+    margin: 2px;
+    min-width: 45px;
+    min-height: 30px;
+    border-style: none;
+    background-color: #08031e;
+    color: white;
+}
+
+button:active {
+    background-color: orangered;
+    color: #fafafa;
+}
