@@ -199,13 +199,13 @@ const hasInvalidCoord = () => {
         return true;
     }
 
-    for (let i = 0; i < tail.length - 1; i++) {
-        const bodyX = tail[i].x;
-        const bodyY = tail[i].y;
-        if (headX === bodyX && headY === bodyY) {
-            return true;
-        }
-    }
+    // for (let i = 0; i < tail.length - 1; i++) {
+    //     const bodyX = tail[i].x;
+    //     const bodyY = tail[i].y;
+    //     if (headX === bodyX && headY === bodyY) {
+    //         return true;
+    //     }
+    // }
 
     if (hasGivenCoord(deadlyApples, headX, headY)) {
         removeEatenApple(deadlyApples, headX, headY);
