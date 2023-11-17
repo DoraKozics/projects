@@ -37,9 +37,11 @@ button {
     border-style: none;
     background-color: #08031e;
     color: white;
+    /*background-color: white; - kek betuvel ha jo, szurke-szurkevel, ha nem jo*/
 }
 
 button:active {
     background-color: orangered;
     color: #fafafa;
 }
+
