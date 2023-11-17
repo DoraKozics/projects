@@ -36,3 +36,8 @@ button {
     background-color: #0000ff;
     color: white;
 }
+
+span {
+    font-family: VT323, serif;
+    font-size: 20px;
+}

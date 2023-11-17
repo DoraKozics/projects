@@ -5,6 +5,8 @@ let canvas;
 let ctx;
 let startButton;
 let pauseButton;
+let alertMessage;
+let endMessage;
 
 let timerId;
 
@@ -13,6 +15,7 @@ let tail = [
     {x: 2, y: 1},
     {x: 3, y: 1}
 ];
+let score = 0;
 
 let goodApples = [];
 let rottenApples = [];
@@ -77,6 +80,9 @@ const placeToStart = () => {
 
     clearTimeout(timerId);
     timerId = setInterval(move, 50);
+
+    endMessage.innerHTML = '';
+    score = 0;
 }
 
 const move = () => {
@@ -127,9 +133,11 @@ const hasEatenAnApple = (newHead) => {
     if (hasGivenCoord(goodApples, newHead.x, newHead.y)) {
         removeEatenApple(goodApples, newHead.x, newHead.y);
         tail.push(newHead);
+        score += 1;
         return true;
     } else if (hasGivenCoord(rottenApples, newHead.x, newHead.y)) {
         removeEatenApple(rottenApples, newHead.x, newHead.y);
+        score += 0.5;
         return true;
     } else if (hasGivenCoord(bestApples, newHead.x, newHead.y)) {
         removeEatenApple(bestApples, newHead.x, newHead.y);
@@ -140,6 +148,7 @@ const hasEatenAnApple = (newHead) => {
             x: finalX, y: finalY
         }
         tail.push(finalHead);
+        score += 5;
         return true;
     } else {
         return false;
@@ -183,13 +192,14 @@ const haveApplesChangeRank = (listBefore, listAfter) => {
 }
 
 const hasInvalidCoord = () => {
-    if (!(tail[0].x >= 0) || !(tail[0].x <= 50) || !(tail[0].y >= 0) || !(tail[0].y <= 50)) {
+    const headX = tail[tail.length - 1].x;
+    const headY = tail[tail.length - 1].y;
+
+    if (!(headX >= 0 && headX <= mx) || !(headY >= 0 && headY < my)) {
         return true;
     }
 
-    const headX = tail[0].x;
-    const headY = tail[0].y;
-    for (let i = 1; i < tail.length; i++) {
+    for (let i = 0; i < tail.length - 1; i++) {
         const bodyX = tail[i].x;
         const bodyY = tail[i].y;
         if (headX === bodyX && headY === bodyY) {
@@ -207,6 +217,9 @@ const hasInvalidCoord = () => {
 const endGame = () => {
     clearInterval(timerId);
     window.alert("Game over!");
+    endMessage = document.createElement("span");
+    endMessage.innerHTML = "Your score is: " + score;
+    alertMessage.appendChild(endMessage);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -214,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx = canvas.getContext("2d");
     startButton = document.getElementById("start-button");
     pauseButton = document.getElementById("pause-button");
+    alertMessage = document.getElementById("alert-message");
 
     startButton.onclick = () => {
         placeToStart();
@@ -252,12 +266,16 @@ document.addEventListener("keydown", (event) => {
     }
 
     if (event.code === "KeyP") {
-        event.preventDefault();
+        // event.preventDefault();
         window.alert("Game paused")
     }
 
     if (event.code === "KeyA") {
-        event.preventDefault();
+        // event.preventDefault();
         placeApple();
+    }
+
+    if (event.code === "KeyR") {
+        placeToStart();
     }
 });
