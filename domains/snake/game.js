@@ -15,7 +15,10 @@ let tail = [
     {x: 2, y: 1},
     {x: 3, y: 1}
 ];
-let score = 0;
+
+let direction = {
+    dx: 0, dy: 1  //default right direction
+};
 
 let goodApples = [];
 let rottenApples = [];
@@ -23,9 +26,41 @@ let deadlyApples = [];
 let bestApples = [];
 let land = [];
 
-let direction = {
-    dx: 0, dy: 1  //default right direction
-};
+let score;
+
+const initStartScreen = () => {
+    ctx.clearRect(0, 0, 500, 500);
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, mx * 10, my * 10);
+    ctx.font = "40px VT323";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("snake: the game", 130, 200);
+    console.log("I did the displaying.")
+}
+
+const displayStartScreen = () => {
+    ctx.clearRect(0, 0, 500, 500);
+    ctx.font = "40px VT323";
+    ctx.fillStyle = "#0000ff";
+    ctx.fillText("snake: the game", 130, 200);
+    ctx.font = "20px VT323";
+    ctx.fillStyle = "#000000";
+    ctx.fillText("start: press 's' or the start button", 110, 230);
+    ctx.font = "20px VT323";
+    ctx.fillStyle = "#000000";
+    ctx.fillText("pause: press 'p' or the pause button", 110, 250);
+    ctx.font = "20px VT323";
+    ctx.fillStyle = "#000000";
+    ctx.fillText("apple: press 'a' to place apples", 130, 270);
+
+}
+
+const displayEndScreen = () => {
+    ctx.globalAlpha = 0.50;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, mx * 10, my * 10);
+    ctx.globalAlpha = 1;
+}
 
 const draw = () => {
     ctx.clearRect(0, 0, 500, 500);
@@ -78,11 +113,17 @@ const placeToStart = () => {
     bestApples = [];
     land = [];
 
+    score = {
+        goodApples: 0,
+        rottenApples: 0,
+        bestApples: 0,
+        land: 0
+    };
+
     clearTimeout(timerId);
     timerId = setInterval(move, 50);
 
     endMessage.innerHTML = '';
-    score = 0;
 }
 
 const move = () => {
@@ -133,11 +174,11 @@ const hasEatenAnApple = (newHead) => {
     if (hasGivenCoord(goodApples, newHead.x, newHead.y)) {
         removeEatenApple(goodApples, newHead.x, newHead.y);
         tail.push(newHead);
-        score += 1;
+        score.goodApples++;
         return true;
     } else if (hasGivenCoord(rottenApples, newHead.x, newHead.y)) {
         removeEatenApple(rottenApples, newHead.x, newHead.y);
-        score += 0.5;
+        score.rottenApples++;
         return true;
     } else if (hasGivenCoord(bestApples, newHead.x, newHead.y)) {
         removeEatenApple(bestApples, newHead.x, newHead.y);
@@ -148,7 +189,7 @@ const hasEatenAnApple = (newHead) => {
             x: finalX, y: finalY
         }
         tail.push(finalHead);
-        score += 5;
+        score.bestApples++;
         return true;
     } else {
         return false;
@@ -218,8 +259,17 @@ const endGame = () => {
     clearInterval(timerId);
     window.alert("Game over!");
     endMessage = document.createElement("span");
-    endMessage.innerHTML = "Your score is: " + score;
+    endMessage.innerHTML = "Your score is: " + calculateScore();
     alertMessage.appendChild(endMessage);
+    displayEndScreen();
+}
+
+const calculateScore = () => {
+    let finalScore = 0;
+    finalScore += score.goodApples;
+    finalScore += score.rottenApples / 2;
+    finalScore += score.bestApples * 5;
+    return finalScore;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -229,17 +279,20 @@ document.addEventListener("DOMContentLoaded", () => {
     pauseButton = document.getElementById("pause-button");
     alertMessage = document.getElementById("alert-message");
 
-    startButton.onclick = () => {
-        placeToStart();
+    if (!score) {
+        initStartScreen();
+        displayStartScreen();
+    } else {
+        displayStartScreen();
     }
 
+    startButton.onclick = () => {
+        placeToStart();
+        draw();
+    }
     pauseButton.onclick = () => {
         window.alert("Game paused");
     }
-
-    draw();
-
-    timerId = setInterval(move, 50);
 });
 
 document.addEventListener("keydown", (event) => {
@@ -275,7 +328,7 @@ document.addEventListener("keydown", (event) => {
         placeApple();
     }
 
-    if (event.code === "KeyR") {
+    if (event.code === "KeyS") {
         placeToStart();
     }
 });

@@ -12,6 +12,7 @@ canvas {
     margin: 25px;
     outline: #837c81 10px solid;
     background-color: white;
+    font-family: VT323, serif;
 }
 
 #button-holder {
