@@ -34,6 +34,7 @@ let bestApples = [];
 let land = [];
 
 let score;
+let highScore = 0;
 
 const isSetToPlay = () => {
     return gameSettings.canPassWall != null
@@ -123,16 +124,80 @@ const displayStartScreen = () => {
     ctx.clearRect(0, 0, 500, 500);
     ctx.font = "40px VT323";
     ctx.fillStyle = "#0000ff";
-    ctx.fillText("snake: the game", 130, 200);
+    ctx.fillText("snake: the game", 130, 160);
     ctx.font = "20px VT323";
+    ctx.fillStyle = "#837c81";
+    ctx.fillText("start: press 's' or the start button", 110, 190);
+    ctx.fillText("pause: press 'p' or the pause button", 110, 210);
+    ctx.fillText("apple: press 'a' to place apples", 110, 230);
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(110, 250, 10, 10);
     ctx.fillStyle = "#000000";
-    ctx.fillText("start: press 's' or the start button", 110, 230);
+    ctx.fillText(": makes you grow 1x, worth 1 point", 120, 260);
+
+    ctx.fillStyle = "#70200e";
+    ctx.fillRect(110, 270, 10, 10);
+    ctx.fillStyle = "#000000";
+    ctx.fillText(": stay the same length, worth 0.5 point", 120, 280);
+
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(110, 290, 10, 10);
+    ctx.fillStyle = "#000000";
+    ctx.fillText(": kills you, turns into land", 120, 300);
+
+    ctx.fillStyle = "magenta";
+    ctx.fillRect(110, 310, 10, 10);
+    ctx.fillStyle = "#000000";
+    ctx.fillText(": grows on land, makes you grow 2x,", 120, 320);
+    ctx.fillText("worth 5 point", 138, 340);
+}
+
+const displayEndScreen = () => {
+    fadeCanvas();
+    ctx.fillStyle = "black";
+    ctx.fillRect(149, 135, 192, 180);
+
+    ctx.strokeStyle = "white";
+    ctx.moveTo(156, 146);
+    ctx.lineTo(156, 303);
+    ctx.stroke();
+
+    ctx.moveTo(334, 146);
+    ctx.lineTo(334, 303);
+    ctx.stroke();
+
+    ctx.moveTo(160, 143);
+    ctx.lineTo(330, 143);
+    ctx.stroke();
+
+    ctx.moveTo(160, 307);
+    ctx.lineTo(330, 307);
+    ctx.stroke();
+
+    ctx.font = "40px VT323";
+    ctx.fillStyle = "red";
+    ctx.fillText("game over", 175, 170);
     ctx.font = "20px VT323";
-    ctx.fillStyle = "#000000";
-    ctx.fillText("pause: press 'p' or the pause button", 110, 250);
-    ctx.font = "20px VT323";
-    ctx.fillStyle = "#000000";
-    ctx.fillText("apple: press 'a' to place apples", 130, 270);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(("Your score is: " + calculateScore()), 170, 200);
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(170, 210, 10, 10);
+    ctx.fillStyle = "white";
+    ctx.fillText((": " + score.goodApples + " x 1"), 180, 220);
+
+    ctx.fillStyle = "#70200e";
+    ctx.fillRect(170, 230, 10, 10);
+    ctx.fillStyle = "white";
+    ctx.fillText((": " + score.rottenApples + " x 0.5"), 180, 240);
+
+    ctx.fillStyle = "magenta";
+    ctx.fillRect(170, 250, 10, 10);
+    ctx.fillStyle = "white";
+    ctx.fillText((": " + score.bestApples + " x 5"), 180, 260);
+
+    ctx.fillText(("Highest score: " + highScore), 170, 295);
 }
 
 const fadeCanvas = () => {
@@ -200,6 +265,7 @@ const placeToStart = () => {
         land: 0
     };
 
+    clearInterval(timerId);
     timerId = setInterval(move, 50);
 
     if (!gameSettings.canPlaceApple) {
@@ -252,9 +318,6 @@ const passThroughWall = (newHead) => {
 const placeApple = () => {
     const x = Math.floor(Math.random() * (mx));
     const y = Math.floor(Math.random() * (my));
-    // while (isOccupied(x, y)) {
-    //     placeApple();
-    // }
 
     if (isOccupied(x, y)) {
         placeApple();
@@ -320,16 +383,17 @@ const removeEatenApple = (list, headX, headY) => {
 }
 
 const rankApples = () => {
-    haveApplesChangeRank(goodApples, rottenApples);
-    haveApplesChangeRank(rottenApples, deadlyApples);
-    haveApplesChangeRank(deadlyApples, land);
+    haveApplesChangeRank(goodApples, rottenApples, 5);
+    haveApplesChangeRank(rottenApples, deadlyApples, 5);
+    haveApplesChangeRank(deadlyApples, land, 5);
+    haveApplesChangeRank(bestApples, deadlyApples, 10);
 }
 
-const haveApplesChangeRank = (listBefore, listAfter) => {
+const haveApplesChangeRank = (listBefore, listAfter, updateTime) => {
     const now = new Date();
     for (let i = 0; i < listBefore.length; i++) {
         const timePassed = (now - listBefore[i].created) / 1000;
-        if (timePassed > 5) {
+        if (timePassed > updateTime) {
             const apple = listBefore[i];
             listBefore.splice(i, 1);
             apple.created = new Date();
@@ -371,11 +435,12 @@ const endGame = () => {
     if (!gameSettings.canPlaceApple) {
         clearInterval(appleTimer);
     }
-    window.alert("Game over!");
-    endMessage = document.createElement("span");
-    endMessage.innerHTML = "Your score is: " + calculateScore();
-    alertMessage.appendChild(endMessage);
-    fadeCanvas();
+    displayEndScreen();
+    // window.alert("Game over!");
+    // endMessage = document.createElement("span");
+    // endMessage.innerHTML = "Your score is: " + calculateScore() + " Highest score: " + highScore;
+    // alertMessage.appendChild(endMessage);
+    // fadeCanvas();
 }
 
 const calculateScore = () => {
@@ -383,6 +448,9 @@ const calculateScore = () => {
     finalScore += score.goodApples;
     finalScore += score.rottenApples / 2;
     finalScore += score.bestApples * 5;
+    if (finalScore > highScore) {
+        highScore = finalScore;
+    }
     return finalScore;
 }
 
