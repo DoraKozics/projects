@@ -252,14 +252,18 @@ const passThroughWall = (newHead) => {
 const placeApple = () => {
     const x = Math.floor(Math.random() * (mx));
     const y = Math.floor(Math.random() * (my));
-    while (isOccupied(x, y)) {
-        placeApple();
-    }
+    // while (isOccupied(x, y)) {
+    //     placeApple();
+    // }
 
-    if (hasGivenCoord(land, x, y)) {
-        bestApples.push({x: x, y: y, created: new Date()});
+    if (isOccupied(x, y)) {
+        placeApple();
     } else {
-        goodApples.push({x: x, y: y, created: new Date()});
+        if (hasGivenCoord(land, x, y)) {
+            bestApples.push({x: x, y: y, created: new Date()});
+        } else {
+            goodApples.push({x: x, y: y, created: new Date()});
+        }
     }
 }
 
