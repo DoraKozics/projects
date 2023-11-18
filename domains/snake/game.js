@@ -9,6 +9,12 @@ let alertMessage;
 let endMessage;
 
 let timerId;
+let gameSettings = {
+    canPassWall: null,
+    canPassSelf: null,
+    canEatApple: null
+};
+let choice = null;
 
 let tail = [
     {x: 1, y: 1},
@@ -17,7 +23,7 @@ let tail = [
 ];
 
 let direction = {
-    dx: 0, dy: 1  //default right direction
+    dx: 0, dy: 1
 };
 
 let goodApples = [];
@@ -28,14 +34,88 @@ let land = [];
 
 let score;
 
-const initStartScreen = () => {
+const isSetToPlay = () => {
+    return gameSettings.canPassWall != null
+        && gameSettings.canPassSelf != null
+        && gameSettings.canEatApple != null;
+}
+
+const displaySettingScreen = () => {
     ctx.clearRect(0, 0, 500, 500);
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, mx * 10, my * 10);
-    ctx.font = "40px VT323";
+    ctx.font = "28px VT323";
     ctx.fillStyle = "#ffffff";
-    ctx.fillText("snake: the game", 130, 200);
-    console.log("I did the displaying.")
+
+    let lines = [];
+    let x = 17;
+    let y = 40;
+    let space = 25;
+    addLine(lines, "welcome to snake: the game!", x, y);
+    y = +y + +space + +space;
+    addLine(lines, "choose your settings:", x, y);
+    y = +y + +space;
+    addLine(lines, "press y/n 3x times whether you", x, y);
+    y = +y + +space;
+    addLine(lines, "- want to pass through walls", x, y);
+    y = +y + +space;
+    addLine(lines, "- want to pass yourself", x, y);
+    y = +y + +space;
+    addLine(lines, "- want to place apples", x, y);
+    y = +y + +space + +space;
+    addLine(lines, "press 'enter' to continue", x, y);
+
+    typeLineByLine(lines);
+
+}
+
+const addLine = (lines, text, x, y) => {
+    lines.push({
+        text: text,
+        x: x,
+        y: y
+    })
+}
+
+const typeLineByLine = (lines) => {
+    let i = 0;
+    let timerId = setInterval(() => {
+        typeLetterByLetter(lines[i].text, lines[i].x, lines[i].y);
+        i++;
+        if (i === lines.length) {
+            clearInterval(timerId);
+        }
+    }, 1500);
+}
+
+const typeLetterByLetter = (text, x, y) => {
+    let i = 0;
+
+    const timerId = setInterval(() => {
+        ctx.fillText(text.charAt(i), x, y);
+        i++;
+        x += 12;
+        if (i === text.length) {
+            clearInterval(timerId);
+        }
+    }, 50);
+}
+
+const setChoice = () => {
+    if (gameSettings.canPassWall === null && choice != null) {
+        gameSettings.canPassWall = choice;
+        choice = null;
+    }
+
+    if (gameSettings.canPassSelf === null && choice != null) {
+        gameSettings.canPassSelf = choice;
+        choice = null;
+    }
+
+    if (gameSettings.canEatApple === null && choice != null) {
+        gameSettings.canEatApple = choice;
+        choice = null;
+    }
 }
 
 const displayStartScreen = () => {
@@ -52,10 +132,9 @@ const displayStartScreen = () => {
     ctx.font = "20px VT323";
     ctx.fillStyle = "#000000";
     ctx.fillText("apple: press 'a' to place apples", 130, 270);
-
 }
 
-const displayEndScreen = () => {
+const fadeCanvas = () => {
     ctx.globalAlpha = 0.50;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, mx * 10, my * 10);
@@ -134,8 +213,8 @@ const move = () => {
     };
 
     if (!hasEatenAnApple(newHead)) {
-        tail.push(newHead); //add the new head
-        tail.shift(); //remove first element
+        tail.push(newHead);
+        tail.shift();
     }
 
     draw();
@@ -257,11 +336,12 @@ const hasInvalidCoord = () => {
 
 const endGame = () => {
     clearInterval(timerId);
+    timerId = '';
     window.alert("Game over!");
     endMessage = document.createElement("span");
     endMessage.innerHTML = "Your score is: " + calculateScore();
     alertMessage.appendChild(endMessage);
-    displayEndScreen();
+    fadeCanvas();
 }
 
 const calculateScore = () => {
@@ -280,18 +360,25 @@ document.addEventListener("DOMContentLoaded", () => {
     alertMessage = document.getElementById("alert-message");
 
     if (!score) {
-        initStartScreen();
-        displayStartScreen();
+        document.fonts.ready.then((fontFaceSet) => {
+            const fontFaces = [...fontFaceSet];
+            displaySettingScreen();
+        });
     } else {
         displayStartScreen();
     }
 
     startButton.onclick = () => {
-        placeToStart();
-        draw();
+        if (isSetToPlay()) {
+            placeToStart();
+            draw();
+        }
     }
     pauseButton.onclick = () => {
-        window.alert("Game paused");
+        if (timerId) {
+            window.alert("Game paused");
+            fadeCanvas();
+        }
     }
 });
 
@@ -318,17 +405,35 @@ document.addEventListener("keydown", (event) => {
         direction.dy = 0;
     }
 
-    if (event.code === "KeyP") {
-        // event.preventDefault();
+    if (event.code === "KeyP" && timerId) {
         window.alert("Game paused")
     }
 
     if (event.code === "KeyA") {
-        // event.preventDefault();
         placeApple();
     }
 
-    if (event.code === "KeyS") {
+    if (event.code === "KeyS" && isSetToPlay()) {
         placeToStart();
+    }
+
+    if (event.code === "Enter" && !timerId && isSetToPlay()) {
+        event.preventDefault();
+        displayStartScreen();
+    }
+
+    if (event.code === "KeyY") {
+        choice = true;
+        setChoice();
+    }
+
+    if (event.code === "KeyZ") {
+        choice = true;
+        setChoice();
+    }
+
+    if (event.code === "KeyN") {
+        choice = false;
+        setChoice();
     }
 });
