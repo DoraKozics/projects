@@ -9,10 +9,11 @@ let alertMessage;
 let endMessage;
 
 let timerId;
+let appleTimer;
 let gameSettings = {
     canPassWall: null,
     canPassSelf: null,
-    canEatApple: null
+    canPlaceApple: null
 };
 let choice = null;
 
@@ -37,7 +38,7 @@ let score;
 const isSetToPlay = () => {
     return gameSettings.canPassWall != null
         && gameSettings.canPassSelf != null
-        && gameSettings.canEatApple != null;
+        && gameSettings.canPlaceApple != null;
 }
 
 const displaySettingScreen = () => {
@@ -112,8 +113,8 @@ const setChoice = () => {
         choice = null;
     }
 
-    if (gameSettings.canEatApple === null && choice != null) {
-        gameSettings.canEatApple = choice;
+    if (gameSettings.canPlaceApple === null && choice != null) {
+        gameSettings.canPlaceApple = choice;
         choice = null;
     }
 }
@@ -183,7 +184,7 @@ const placeToStart = () => {
     ];
 
     direction = {
-        dx: 0, dy: 1  //default right direction
+        dx: 0, dy: 1
     };
 
     goodApples = [];
@@ -199,8 +200,11 @@ const placeToStart = () => {
         land: 0
     };
 
-    clearTimeout(timerId);
     timerId = setInterval(move, 50);
+
+    if (!gameSettings.canPlaceApple) {
+        appleTimer = setInterval(placeApple, 850);
+    }
 
     endMessage.innerHTML = '';
 }
@@ -211,6 +215,10 @@ const move = () => {
         x: oldHead.x + direction.dx,
         y: oldHead.y + direction.dy
     };
+
+    if (gameSettings.canPassWall) {
+        passThroughWall(newHead);
+    }
 
     if (!hasEatenAnApple(newHead)) {
         tail.push(newHead);
@@ -224,6 +232,21 @@ const move = () => {
     }
 
     rankApples();
+}
+
+const passThroughWall = (newHead) => {
+    if (newHead.x >= mx) {
+        newHead.x = 0;
+    }
+    if (newHead.x < 0) {
+        newHead.x = mx - 1;
+    }
+    if (newHead.y >= my) {
+        newHead.y = 0;
+    }
+    if (newHead.y < 0) {
+        newHead.y = my -1;
+    }
 }
 
 const placeApple = () => {
@@ -315,17 +338,21 @@ const hasInvalidCoord = () => {
     const headX = tail[tail.length - 1].x;
     const headY = tail[tail.length - 1].y;
 
-    if (!(headX >= 0 && headX <= mx) || !(headY >= 0 && headY < my)) {
-        return true;
+    if (!gameSettings.canPassWall) {
+        if (!(headX >= 0 && headX <= mx) || !(headY >= 0 && headY < my)) {
+            return true;
+        }
     }
 
-    // for (let i = 0; i < tail.length - 1; i++) {
-    //     const bodyX = tail[i].x;
-    //     const bodyY = tail[i].y;
-    //     if (headX === bodyX && headY === bodyY) {
-    //         return true;
-    //     }
-    // }
+    if (!gameSettings.canPassSelf) {
+        for (let i = 0; i < tail.length - 1; i++) {
+            const bodyX = tail[i].x;
+            const bodyY = tail[i].y;
+            if (headX === bodyX && headY === bodyY) {
+                return true;
+            }
+        }
+    }
 
     if (hasGivenCoord(deadlyApples, headX, headY)) {
         removeEatenApple(deadlyApples, headX, headY);
@@ -337,6 +364,9 @@ const hasInvalidCoord = () => {
 const endGame = () => {
     clearInterval(timerId);
     timerId = '';
+    if (!gameSettings.canPlaceApple) {
+        clearInterval(appleTimer);
+    }
     window.alert("Game over!");
     endMessage = document.createElement("span");
     endMessage.innerHTML = "Your score is: " + calculateScore();
@@ -409,7 +439,7 @@ document.addEventListener("keydown", (event) => {
         window.alert("Game paused")
     }
 
-    if (event.code === "KeyA") {
+    if (event.code === "KeyA" && gameSettings.canPlaceApple) {
         placeApple();
     }
 
