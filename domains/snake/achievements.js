@@ -25,7 +25,7 @@ let achievements = [
         hasWon: false,
         colorCode: "#32cd44",
         title: "the environmentalist",
-        description: "make 80% of the map green"
+        description: "make 75% of the map green"
     },
     {
         color: "blue",
@@ -120,8 +120,7 @@ const hasWonBrown = () => {
 
 const hasWonGreen = () => {
     const totalGreen = mx * my;
-    console.log(score.land);
-    if ((score.land / totalGreen) > 0.8) {
+    if ((score.land / totalGreen) > 0.75) {
         achievements[3].hasWon = true;
     }
 }
