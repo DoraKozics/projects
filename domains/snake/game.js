@@ -15,6 +15,7 @@ let gameSettings = {
 };
 let choice = null;
 let isPaused = false;
+let isGameOver = false;
 
 let tail = [
     {x: 1, y: 1},
@@ -250,6 +251,7 @@ const endGame = () => {
     if (!gameSettings.canPlaceApple) {
         clearInterval(appleTimer);
     }
+    isGameOver = true;
     displayEndScreen();
 }
 
@@ -281,6 +283,17 @@ const pauseGame = () => {
             appleTimer = setInterval(placeApple, 750);
         }
     }
+}
+
+const resetGameSettings = () => {
+    isGameOver = false;
+    gameSettings = {
+        canPassWall: null,
+        canPassSelf: null,
+        canPlaceApple: null
+    };
+    choice = null;
+    displaySettingScreen();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -362,5 +375,9 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "KeyN") {
         choice = false;
         setChoice();
+    }
+
+    if (event.code === "KeyR" && isGameOver) {
+        resetGameSettings();
     }
 });

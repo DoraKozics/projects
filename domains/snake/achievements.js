@@ -1,8 +1,26 @@
-let hasWonPink;
-let hasWonGreen;
-let hasWonRed;
-let hasWonBrown;
-let hasWonBlue;
+let achievements = {
+    defaultColor: "#837c81",
+    pink: {
+        hasWon: false,
+        color: "magenta"
+    },
+    green: {
+        hasWon: false,
+        color: "#32cd44"
+    },
+    red: {
+        hasWon: false,
+        color: "red"
+    },
+    brown: {
+        hasWon: false,
+        color: "#70200e"
+    },
+    blue: {
+        hasWon: false,
+        color: "#0000ff"
+    }
+}
 
 let hasOpenedWindow = false;
 let achievementsButton;

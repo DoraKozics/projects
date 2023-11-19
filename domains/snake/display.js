@@ -130,48 +130,53 @@ const draw = () => {
 const displayEndScreen = () => {
     fadeCanvas();
     ctx.fillStyle = "black";
-    ctx.fillRect(149, 135, 192, 180);
+    ctx.fillRect(144, 120, 202, 210);
 
     ctx.strokeStyle = "white";
-    ctx.moveTo(156, 146);
-    ctx.lineTo(156, 303);
+    ctx.moveTo(150, 131);
+    ctx.lineTo(150, 321);
     ctx.stroke();
 
-    ctx.moveTo(334, 146);
-    ctx.lineTo(334, 303);
+    ctx.moveTo(340, 131);
+    ctx.lineTo(340, 321);
     ctx.stroke();
 
-    ctx.moveTo(160, 143);
-    ctx.lineTo(330, 143);
+    ctx.moveTo(152, 128);
+    ctx.lineTo(338, 128);
     ctx.stroke();
 
-    ctx.moveTo(160, 307);
-    ctx.lineTo(330, 307);
+    ctx.moveTo(152, 323);
+    ctx.lineTo(338, 323);
     ctx.stroke();
 
     ctx.font = "40px VT323";
     ctx.fillStyle = "red";
-    ctx.fillText("game over", 175, 170);
+    ctx.fillText("game over", 175, 155);
     ctx.font = "20px VT323";
     ctx.fillStyle = "#ffffff";
-    ctx.fillText(("Your score is: " + calculateScore()), 170, 200);
+    ctx.fillText(("Your score is: " + calculateScore()), 175, 185);
 
     ctx.fillStyle = "red";
-    ctx.fillRect(170, 210, 10, 10);
+    ctx.fillRect(175, 195, 10, 10);
     ctx.fillStyle = "white";
-    ctx.fillText((": " + score.goodApples + " x 1"), 180, 220);
+    ctx.fillText((": " + score.goodApples + " x 1"), 185, 205);
 
     ctx.fillStyle = "#70200e";
-    ctx.fillRect(170, 230, 10, 10);
+    ctx.fillRect(175, 215, 10, 10);
     ctx.fillStyle = "white";
-    ctx.fillText((": " + score.rottenApples + " x 0.5"), 180, 240);
+    ctx.fillText((": " + score.rottenApples + " x 0.5"), 185, 225);
 
     ctx.fillStyle = "magenta";
-    ctx.fillRect(170, 250, 10, 10);
+    ctx.fillRect(175, 235, 10, 10);
     ctx.fillStyle = "white";
-    ctx.fillText((": " + score.bestApples + " x 5"), 180, 260);
+    ctx.fillText((": " + score.bestApples + " x 5"), 185, 245);
 
-    ctx.fillText(("Highest score: " + highScore), 170, 295);
+    ctx.fillText(("Highest score: " + highScore), 175, 270);
+
+    ctx.font = "16px VT323";
+    ctx.fillStyle = "#837c81";
+    ctx.fillText(("press 's' or start to start"), 160, 297);
+    ctx.fillText(("press 'r' to change settings"), 156, 312);
 }
 
 const displayPauseButton = () => {
