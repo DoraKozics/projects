@@ -57,10 +57,28 @@ button#achievements-button {
     text-align: center;
 }
 
-#close-button {
-    position: relative;
-    top: 80%;
-    width: 100%;
+.achievement-list-item {
+    background-color: #837c81;
+    margin: 10px 10px 10px 10px;
+    width: 94%;
+    height: 55px;
+}
+
+.achievement-title {
+    text-align: left;
+    margin-left: 5px;
+    font-family: VT323, serif;
+    font-size: 24px;
+    color: black;
+}
+
+.achievement-desc {
+    text-align: right;
+    margin-right: -5px;
+   padding: 10px;
+    font-family: VT323, serif;
+    font-size: 18px;
+    color: #f1f3f2;
 }
 
 .hidden {

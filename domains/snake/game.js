@@ -201,7 +201,7 @@ const removeEatenApple = (list, headX, headY) => {
 const rankApples = () => {
     haveApplesChangeRank(goodApples, rottenApples, 5);
     haveApplesChangeRank(rottenApples, deadlyApples, 5);
-    haveApplesChangeRank(deadlyApples, land, 5);
+    haveAppleTurnToLand(deadlyApples, land, 5);
     haveApplesChangeRank(bestApples, deadlyApples, 10);
 }
 
@@ -214,6 +214,21 @@ const haveApplesChangeRank = (listBefore, listAfter, updateTime) => {
             listBefore.splice(i, 1);
             apple.created = new Date();
             listAfter.push(apple);
+        }
+    }
+}
+
+const haveAppleTurnToLand = (deadlyApples, land, updateTime) => {
+    const now = new Date();
+    for (let i = 0; i < deadlyApples.length; i++) {
+        const timePassed = (now - deadlyApples[i].created) / 1000;
+        if (timePassed > updateTime) {
+            const apple = deadlyApples[i];
+            deadlyApples.splice(i, 1);
+
+            if (!(hasGivenCoord(land, apple.x, apple.y))) {
+                land.push(apple);
+            }
         }
     }
 }
@@ -252,6 +267,9 @@ const endGame = () => {
         clearInterval(appleTimer);
     }
     isGameOver = true;
+    score.land = land.length;
+
+    checkIfAchievementsWon();
     displayEndScreen();
 }
 
