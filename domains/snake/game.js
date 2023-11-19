@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     startButton.onclick = () => {
-        if (isSetToPlay()) {
+        if (isSetToPlay() && !timerId) {
             placeToStart();
             draw();
         }
@@ -333,7 +333,7 @@ document.addEventListener("keydown", (event) => {
         placeApple();
     }
 
-    if (event.code === "KeyS" && isSetToPlay()) {
+    if (event.code === "KeyS" && !timerId && isSetToPlay()) {
         placeToStart();
     }
 

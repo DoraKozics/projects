@@ -45,3 +45,24 @@ button#achievements-button {
     background-color: #32cd44;
     color: white;
 }
+
+#achievements-window {
+    position:absolute;
+    background-color: #f1f3f2;
+    width: 350px;
+    height: 400px;
+    top: 70px;
+    font-family: VT323, serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+#close-button {
+    position: relative;
+    top: 80%;
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
