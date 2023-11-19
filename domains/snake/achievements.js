@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 const displayAchievements = () => {
-    if (!hasOpenedWindow && !timerId) {
+    if (!hasOpenedWindow && (!timerId || isPaused)) {
         achievementsWindow.classList.remove("hidden");
         hasOpenedWindow = true;
         achievementsWindow.innerHTML = "achievements";

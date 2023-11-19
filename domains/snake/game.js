@@ -268,11 +268,18 @@ const pauseGame = () => {
     if (timerId && !isPaused) {
         isPaused = true;
         clearInterval(timerId);
+        if (!gameSettings.canPlaceApple) {
+            clearInterval(appleTimer);
+        }
+
         fadeCanvas();
         displayPauseButton();
     } else if (isPaused) {
         isPaused = false;
         timerId = setInterval(move, 50);
+        if (!gameSettings.canPlaceApple) {
+            appleTimer = setInterval(placeApple, 750);
+        }
     }
 }
 

@@ -178,23 +178,6 @@ const displayPauseButton = () => {
     ctx.fillStyle = "#0000ff";
     ctx.fillRect(150, 180, 200, 100);
 
-    // ctx.strokeStyle = "white";
-    // ctx.moveTo(154, 183);
-    // ctx.lineTo(346, 183);
-    // ctx.stroke();
-    //
-    // ctx.moveTo(154, 277);
-    // ctx.lineTo(346, 277);
-    // ctx.stroke();
-    //
-    // ctx.moveTo(153, 183);
-    // ctx.lineTo(153, 276);
-    // ctx.stroke();
-    //
-    // ctx.moveTo(347, 183);
-    // ctx.lineTo(347, 276);
-    // ctx.stroke();
-
     ctx.font = "32px VT323";
     ctx.fillStyle = "white";
     ctx.fillText("game paused", 180, 215);
