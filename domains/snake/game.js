@@ -5,7 +5,6 @@ let canvas;
 let ctx;
 let startButton;
 let pauseButton;
-let endMessage;
 
 let timerId;
 let appleTimer;
@@ -15,6 +14,7 @@ let gameSettings = {
     canPlaceApple: null
 };
 let choice = null;
+let isPaused = false;
 
 let tail = [
     {x: 1, y: 1},
@@ -88,8 +88,6 @@ const placeToStart = () => {
     if (!gameSettings.canPlaceApple) {
         appleTimer = setInterval(placeApple, 750);
     }
-
-    endMessage.innerHTML = '';
 }
 
 const move = () => {
@@ -128,7 +126,7 @@ const passThroughWall = (newHead) => {
         newHead.y = 0;
     }
     if (newHead.y < 0) {
-        newHead.y = my -1;
+        newHead.y = my - 1;
     }
 }
 
@@ -266,6 +264,18 @@ const calculateScore = () => {
     return finalScore;
 }
 
+const pauseGame = () => {
+    if (timerId && !isPaused) {
+        isPaused = true;
+        clearInterval(timerId);
+        fadeCanvas();
+        displayPauseButton();
+    } else if (isPaused) {
+        isPaused = false;
+        timerId = setInterval(move, 50);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
@@ -288,10 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     pauseButton.onclick = () => {
-        if (timerId) {
-            window.alert("Game paused");
-            fadeCanvas();
-        }
+       pauseGame();
     }
 });
 
@@ -319,7 +326,7 @@ document.addEventListener("keydown", (event) => {
     }
 
     if (event.code === "KeyP" && timerId) {
-        window.alert("Game paused")
+        pauseGame();
     }
 
     if (event.code === "KeyA" && gameSettings.canPlaceApple) {

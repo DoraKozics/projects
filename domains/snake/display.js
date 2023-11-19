@@ -62,33 +62,35 @@ const displayStartScreen = () => {
     ctx.clearRect(0, 0, 500, 500);
     ctx.font = "40px VT323";
     ctx.fillStyle = "#0000ff";
-    ctx.fillText("snake: the game", 130, 160);
+    ctx.fillText("snake: the game", 130, 150);
     ctx.font = "20px VT323";
     ctx.fillStyle = "#837c81";
-    ctx.fillText("start: press 's' or the start button", 110, 190);
-    ctx.fillText("pause: press 'p' or the pause button", 110, 210);
-    ctx.fillText("apple: press 'a' to place apples", 110, 230);
+    ctx.fillText("start: press 's' or the start button", 110, 180);
+    ctx.fillText("pause: press 'p' or the pause button", 110, 200);
+    ctx.fillText("apple: press 'a' to place apples", 110, 220);
 
     ctx.fillStyle = "red";
-    ctx.fillRect(110, 250, 10, 10);
+    ctx.fillRect(110, 240, 10, 10);
     ctx.fillStyle = "#000000";
-    ctx.fillText(": makes you grow 1x, worth 1 point", 120, 260);
+    ctx.fillText(": makes you grow 1x, turns brown in 5s", 120, 250);
+    ctx.fillText("worth 1 point", 138, 270);
 
     ctx.fillStyle = "#70200e";
-    ctx.fillRect(110, 270, 10, 10);
+    ctx.fillRect(110, 280, 10, 10);
     ctx.fillStyle = "#000000";
-    ctx.fillText(": stay the same length, worth 0.5 point", 120, 280);
-
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(110, 290, 10, 10);
-    ctx.fillStyle = "#000000";
-    ctx.fillText(": kills you, turns into land", 120, 300);
+    ctx.fillText(": stay the same length, turns black in 5s", 120, 290);
+    ctx.fillText("worth 0.5 point", 138, 310);
 
     ctx.fillStyle = "magenta";
-    ctx.fillRect(110, 310, 10, 10);
+    ctx.fillRect(110, 320, 10, 10);
     ctx.fillStyle = "#000000";
-    ctx.fillText(": grows on land, makes you grow 2x,", 120, 320);
-    ctx.fillText("worth 5 point", 138, 340);
+    ctx.fillText(": grows on land, makes you grow 2x,", 120, 330);
+    ctx.fillText("turns black in 10s, worth 5 point", 138, 350);
+
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(110, 360, 10, 10);
+    ctx.fillStyle = "#000000";
+    ctx.fillText(": kills you, turns into land", 120, 370);
 }
 
 const draw = () => {
@@ -170,6 +172,37 @@ const displayEndScreen = () => {
     ctx.fillText((": " + score.bestApples + " x 5"), 180, 260);
 
     ctx.fillText(("Highest score: " + highScore), 170, 295);
+}
+
+const displayPauseButton = () => {
+    ctx.fillStyle = "#0000ff";
+    ctx.fillRect(150, 180, 200, 100);
+
+    // ctx.strokeStyle = "white";
+    // ctx.moveTo(154, 183);
+    // ctx.lineTo(346, 183);
+    // ctx.stroke();
+    //
+    // ctx.moveTo(154, 277);
+    // ctx.lineTo(346, 277);
+    // ctx.stroke();
+    //
+    // ctx.moveTo(153, 183);
+    // ctx.lineTo(153, 276);
+    // ctx.stroke();
+    //
+    // ctx.moveTo(347, 183);
+    // ctx.lineTo(347, 276);
+    // ctx.stroke();
+
+    ctx.font = "32px VT323";
+    ctx.fillStyle = "white";
+    ctx.fillText("game paused", 180, 215);
+
+    ctx.font = "20px VT323";
+    ctx.fillStyle = "#837c81";
+    ctx.fillText("press 'p' or pause", 180, 242);
+    ctx.fillText("to resume", 210, 260);
 }
 
 const fadeCanvas = () => {
