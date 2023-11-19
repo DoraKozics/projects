@@ -4,14 +4,14 @@ let achievements = [
         hasWon: false,
         colorCode: "magenta",
         title: "the strategist",
-        description: "eat 50 pink apples"
+        description: "eat 40 pink apples"
     },
     {
         color: "red",
         hasWon: false,
         colorCode: "red",
         title: "the picky eater",
-        description: "eat 0 rotten apples out of a min 40"
+        description: "eat 0 rotten apples out of a min 60"
     },
     {
         color: "brown",
@@ -25,7 +25,7 @@ let achievements = [
         hasWon: false,
         colorCode: "#32cd44",
         title: "the environmentalist",
-        description: "make 70% of the map green"
+        description: "make 80% of the map green"
     },
     {
         color: "blue",
@@ -98,14 +98,14 @@ const checkIfAchievementsWon = () => {
 }
 
 const hasWonPink = () => {
-    if (score.bestApples >= 50) {
+    if (score.bestApples >= 40) {
         achievements[0].hasWon = true;
     }
 }
 
 const hasWonRed = () => {
     const totalApples = +score.bestApples + +score.goodApples;
-    if (score.rottenApples === 0 && totalApples >= 40) {
+    if (score.rottenApples === 0 && totalApples >= 60) {
         achievements[1].hasWon = true;
     }
 }
@@ -121,7 +121,7 @@ const hasWonBrown = () => {
 const hasWonGreen = () => {
     const totalGreen = mx * my;
     console.log(score.land);
-    if ((score.land / totalGreen) > 0.7) {
+    if ((score.land / totalGreen) > 0.8) {
         achievements[3].hasWon = true;
     }
 }
